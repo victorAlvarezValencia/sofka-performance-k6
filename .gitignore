@@ -1,0 +1,43 @@
+# Proyecto Sofka - k6 / Performance Testing
+
+# Archivos del IDE
+.idea/
+.vscode/
+*.iml
+
+# Dependencias y compilados locales
+node_modules/
+*.class
+out/
+build/
+dist/
+
+# Resultados adicionales de reproduccion
+# Se conservan los JSON finales SANITIZADOS en evidencias/
+resultados-locales/
+logs/
+tmp/
+*.log
+*.tmp
+*.bak
+
+# Configuraciones privadas y claves
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Exportaciones HTTP sin revisar
+*.har
+
+# SO
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IMPORTANTE: NO ignorar data/users.csv ni evidencias/*.json
+# La prueba necesita el CSV y los resúmenes de k6 son evidencia.
+# Revisar los archivos manualmente antes del push publico.

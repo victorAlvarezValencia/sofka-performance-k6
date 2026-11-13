@@ -1,0 +1,141 @@
+SOFKA — EJERCICIO 1: HALLAZGOS Y CONCLUSIONES
+============================================
+
+1. OBJETIVO
+-----------
+Evaluar la autenticacion de FakeStoreAPI mediante un script de carga
+elaborado con Grafana k6 v2.4.0, parametrizado desde data/users.csv
+(cinco cuentas ficticias del enunciado). El escenario programa
+20 iteraciones/s durante 30 segundos, con una solicitud POST por
+iteracion, y valida el codigo HTTP y la presencia de un token.
+
+Criterios del enunciado:
+ - Alcanzar al menos 20 TPS.
+ - Tiempo de respuesta maximo de 1.500 milisegundos.
+ - Tasa de error inferior al 3 %.
+
+2. AMBIENTES Y ALCANCE
+---------------------
+A. MOCK LOCAL: servidor sencillo en Java 21 sobre localhost:3000.
+   Se uso para comprobar la configuracion del generador y sus umbrales.
+   NO valida realmente contrasenas ni reproduce el backend remoto.
+
+B. FAKESTOREAPI: POST https://fakestoreapi.com/auth/login.
+   Se verificaron previamente cinco credenciales mediante smoke con
+   HTTP 201 y token recibido, y se realizo una ejecucion de carga.
+
+Ambos resultados se reportan por separado para evitar extrapolaciones
+injustificadas del mock al servicio real.
+
+3. RESULTADOS OBSERVADOS
+-----------------------
+Metrica                            Mock local      FakeStoreAPI
+----------------------------------------------------------------
+Solicitudes completadas            601             601
+Tasa media (http_reqs.rate)         20,0323 req/s   19,7960 req/s
+Iteraciones perdidas               0               0
+Checks correctos                   1202 / 1202     1202 / 1202
+Tasa de error HTTP                 0 %             0 %
+Tasa de error funcional            0 %             0 %
+Duracion HTTP promedio             0,8773 ms       378,0547 ms
+Duracion HTTP p95                  1,6681 ms       427,4810 ms
+Duracion HTTP maxima               63,7994 ms      783,8520 ms
+
+Se observo el cumplimiento de los cinco thresholds implementados:
+ - http_req_duration max<=1500
+ - http_req_failed rate<0.03
+ - login_errors rate<0.03
+ - dropped_iterations count==0
+ - http_reqs count>=600
+
+4. HALLAZGOS
+------------
+H-01. AUTENTICACION FUNCIONAL ESTABLE EN LA MUESTRA
+Las 601 solicitudes de cada prueba devolvieron el HTTP 201 esperado y
+una respuesta que contenia token. Se registraron 1.202 checks
+aprobados por ambiente, sin errores funcionales ni HTTP.
+
+H-02. LATENCIA POR DEBAJO DEL LIMITE
+En FakeStoreAPI se registro un maximo de 783,852 ms, menor que
+1.500 ms. El percentil 95 fue de 427,481 ms. Por lo tanto, el
+criterio de tiempo maximo se cumplio en la ejecucion observada.
+
+H-03. ERRORES POR DEBAJO DEL LIMITE
+Los indicadores http_req_failed y login_errors fueron de 0 %.
+Se cumplio la condicion estricta de menos del 3 % de errores.
+
+H-04. TPS PROGRAMADOS VS. TPS MEDIDOS
+El ejecutor constant-arrival-rate programo 20 iteraciones/s y
+completo 601 solicitudes, sin descartes. No obstante, k6 reporto
+en FakeStoreAPI una media de 19,795992 req/s, inferior a 20.
+La diferencia fue de aproximadamente 0,204 req/s (1,02 %).
+
+El threshold 'http_reqs: count>=600' verifica la cantidad total,
+no el throughput medio. Por ello aparecio en verde, pero NO valida
+por si solo el requisito literal de 20 TPS medidos. Este requisito
+queda MARGINALMENTE POR DEBAJO segun la tasa global reportada.
+No se alteraron las metricas ni se declara aprobado ese requisito.
+
+H-05. UTILIDAD Y LIMITES DEL MOCK
+El entorno simulado alcanzo 20,0323 req/s con latencias muy bajas.
+Esto demuestra el funcionamiento del escenario y del generador de
+carga, NO que FakeStoreAPI tenga esa misma capacidad o latencia.
+
+H-06. TRAZABILIDAD Y PARAMETRIZACION
+Los datos proceden de un CSV con columnas user,password. El script
+transforma el campo user a username al enviar el JSON. Cada
+iteracion ejecuta una peticion y verifica codigo HTTP 201 y token.
+Los resúmenes JSON preservan las metricas agregadas por entorno.
+
+5. LIMITACIONES
+---------------
+ - Resultados procedentes de una sola ejecucion por ambiente.
+ - No se conservaron series temporales desglosadas por segundo para
+   verificar un TPS minimo en cada intervalo.
+ - No se monitorizaron recursos internos del servidor remoto.
+ - FakeStoreAPI es publico y su comportamiento puede variar.
+ - El escenario estuvo programado a 20 TPS, pero su tasa media
+   observada no alcanzo de forma estricta el minimo requerido.
+ - El mock no comprueba autenticacion real ni persistencia de datos.
+ - No debe repetirse o incrementarse la carga contra un servicio
+   ajeno sin confirmar la autorizacion del operador.
+
+6. RECOMENDACIONES
+------------------
+ - Incorporar a futuro una validacion explicita de tasa media
+   ('http_reqs: rate>=20') y metricas por intervalos de tiempo.
+ - Ejecutar varias corridas controladas en un ambiente autorizado
+   para obtener dispersion y mayor confianza estadistica.
+ - Separar y conservar evidencias de pruebas reales y simuladas.
+ - Conservar el CSV parametrizado y las aserciones funcionales.
+ - Evitar incluir credenciales privadas, tokens o trazas sin
+   sanitizar dentro del repositorio publico.
+ - Evitar programar el escenario remoto de 20 TPS como tarea
+   automatica de GitHub Actions sin permiso del servicio.
+
+7. ESTADO DE ENTREGA
+--------------------
+Script de carga: IMPLEMENTADO.
+CSV de cinco usuarios de prueba: PARAMETRIZADO.
+Smoke contra FakeStoreAPI: EJECUTADO.
+Mock local a 20 iteraciones/s: EJECUTADO.
+Carga contra FakeStoreAPI: EJECUTADA.
+Checks y thresholds configurados: APROBADOS EN AMBAS EJECUCIONES.
+Tiempo maximo del servicio real: CUMPLE EN LA MUESTRA.
+Errores del servicio real: CUMPLE EN LA MUESTRA.
+Throughput medio estricto >=20 TPS en FakeStoreAPI: NO DEMOSTRADO
+(19,7960 req/s observadas).
+
+Reportes tecnicos: disponibles en evidencias/.
+Documentacion de reproduccion: README.md y readme.txt.
+Publicacion definitiva en GitHub: PENDIENTE AL MOMENTO DE REDACTAR.
+
+CONCLUSION GENERAL
+------------------
+La implementacion automatiza el escenario requerido, parametriza
+los datos mediante CSV, ejecuta comprobaciones funcionales y
+produce resultados reproducibles. La API real cumplio las
+condiciones de latencia y errores en la muestra; sin embargo,
+la tasa promedio reportada por k6 fue ligeramente inferior a
+20 TPS. La evidencia se presenta de manera transparente, sin
+confundir el throughput programado con el observado.
