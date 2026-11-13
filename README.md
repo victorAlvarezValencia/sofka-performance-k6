@@ -27,7 +27,6 @@ Cada iteración envía **una solicitud POST**; por eso se analizan `iterations`,
 ```text
 sofka-performance-k6/
 ├── scripts/
-│   ├── verificar-k6.js              # Comprobación inicial de instalación (opcional)
 │   ├── login-smoke.js               # Cinco logins secuenciales contra FakeStoreAPI
 │   └── login-load.js                # Escenario de carga, por defecto al mock local
 ├── data/
@@ -162,6 +161,8 @@ Los **cinco thresholds implementados** pasaron: `http_reqs count>=600`, `http_re
 - [`evidencias/evidencia-fakestore.md`](evidencias/evidencia-fakestore.md): análisis del endpoint real.
 - `evidencias/resumen-mock.json` y `evidencias/resumen-fakestore.json`: exportaciones originales resumidas de k6.
 - `conclusiones.txt`: hallazgos, limitaciones y evaluación frente al enunciado.
+- [Dashboard HTML del mock local](evidencias/dashboard-mock.html):
+  reporte visual interactivo de la prueba de carga local.
 
 Los JSON exportados contienen métricas agregadas, no los tokens de autenticación. Aun así, **revisar todos los archivos antes de publicarlos**; excluir trazas HTTP sin depurar, registros y secretos.
 

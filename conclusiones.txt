@@ -128,7 +128,15 @@ Throughput medio estricto >=20 TPS en FakeStoreAPI: NO DEMOSTRADO
 
 Reportes tecnicos: disponibles en evidencias/.
 Documentacion de reproduccion: README.md y readme.txt.
-Publicacion definitiva en GitHub: PENDIENTE AL MOMENTO DE REDACTAR.
+Publicacion definitiva en GitHub: COMPLETADA.
+Repositorio: https://github.com/victorAlvarezValencia/sofka-performance-k6
+
+Reporte visual del mock local:
+evidencias/dashboard-mock.html
+
+Nota: El dashboard corresponde exclusivamente al mock local.
+Los resultados de FakeStoreAPI se documentan en
+resumen-fakestore.json y evidencia-fakestore.md.
 
 CONCLUSION GENERAL
 ------------------
