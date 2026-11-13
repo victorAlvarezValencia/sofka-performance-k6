@@ -13,7 +13,7 @@ Proyecto de automatización de pruebas de rendimiento para el **Ejercicio 1 — 
 | Requisito | Implementación o comprobación |
 |---|---|
 | API | `POST /auth/login` de FakeStoreAPI |
-| Datos de entrada | `data/users.csv`, columnas `user,password`, cinco filas suministradas en el ejercicio |
+| Datos de entrada | `data/users.csv`, columnas `user,passwd`, cinco filas suministradas en el ejercicio |
 | Tasa programada | 20 iteraciones/s con `constant-arrival-rate` |
 | Latencia permitida | Máximo **1.500 ms** por petición HTTP |
 | Tasa de error permitida | **Menos del 3 %** |
@@ -81,7 +81,7 @@ Los resultados dependen del equipo y entorno. El proyecto no incluye una aplicac
    cd sofka-performance-k6
    ```
 
-4. Confirmar que `data/users.csv` existe, que su primera línea es `user,password` y que contiene las **cinco filas proporcionadas para esta prueba**. Los scripts convierten `user` en el campo JSON `username`. No utilizar credenciales personales ni de producción.
+4. Confirmar que `data/users.csv` existe, que su primera línea es `user,passwd` y que contiene las **cinco filas proporcionadas para esta prueba**. Los scripts convierten `user` en el campo JSON `username`. No utilizar credenciales personales ni de producción.
 
 ## Ejecución paso a paso
 

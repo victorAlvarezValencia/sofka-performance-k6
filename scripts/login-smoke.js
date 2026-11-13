@@ -11,7 +11,7 @@ const usuarios = new SharedArray('usuarios-sofka', function () {
 
     const cabecera = lineas.shift().trim();
 
-    if (cabecera !== 'user,password') {
+    if (cabecera !== 'user,passwd') {
         throw new Error('El CSV debe tener las columnas user,password');
     }
 

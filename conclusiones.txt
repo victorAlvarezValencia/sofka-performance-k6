@@ -82,7 +82,7 @@ Esto demuestra el funcionamiento del escenario y del generador de
 carga, NO que FakeStoreAPI tenga esa misma capacidad o latencia.
 
 H-06. TRAZABILIDAD Y PARAMETRIZACION
-Los datos proceden de un CSV con columnas user,password. El script
+Los datos proceden de un CSV con columnas user,passwd. El script
 transforma el campo user a username al enviar el JSON. Cada
 iteracion ejecuta una peticion y verifica codigo HTTP 201 y token.
 Los resúmenes JSON preservan las metricas agregadas por entorno.

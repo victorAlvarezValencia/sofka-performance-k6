@@ -27,7 +27,7 @@ const usuarios = new SharedArray('usuarios-sofka', () => {
     const contenido = open('../data/users.csv');
     const lineas = contenido.trim().split(/\r?\n/);
 
-    if (lineas.shift().trim() !== 'user,password') {
+    if (lineas.shift().trim() !== 'user,passwd') {
         throw new Error('Cabecera CSV invalida');
     }
 

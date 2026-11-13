@@ -35,7 +35,7 @@ Documentacion: https://grafana.com/docs/k6/latest/set-up/install-k6/
  - k6 instalado y disponible en el PATH.
  - Para usar el mock, tener Java 21 en el PATH.
  - Puerto local 3000 disponible.
- - Archivo data/users.csv con cabecera user,password y los cinco
+ - Archivo data/users.csv con cabecera user,passwd y los cinco
    registros de prueba suministrados en el enunciado.
  - Conexion a Internet solo para FakeStoreAPI y GitHub.
 
@@ -55,7 +55,7 @@ Crear/clonar el repositorio publico:
  scripts/verificar-k6.js    : comprobacion opcional del CLI.
  scripts/login-smoke.js     : smoke de 5 logins contra FakeStoreAPI.
  scripts/login-load.js      : prueba de carga, por defecto al mock.
- data/users.csv             : cinco usuarios de prueba; cabecera user,password.
+ data/users.csv             : cinco usuarios de prueba; cabecera user,passwd.
  mock/MockLoginServer.java  : servidor local simulado HTTP 201.
  evidencias/                : dos resúmenes JSON y reportes Markdown.
  conclusiones.txt           : hallazgos y conclusiones.
